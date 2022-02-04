@@ -23,8 +23,8 @@ yes | sdk install  maven
 
 ## get repositories
 [[ ! -d "snyk-intellij-plugin" ]] && git clone https://github.com/snyk/snyk-intellij-plugin
-[[ ! -d "snyk-intellij-plugin" ]] && git clone https://github.com/snyk/snyk-eclipse-plugin
-[[ ! -d "snyk-intellij-plugin" ]] && git clone https://github.com/snyk/vscode-extension
+[[ ! -d "snyk-eclipse-plugin" ]] && git clone https://github.com/snyk/snyk-eclipse-plugin
+[[ ! -d "vscode-extension" ]] && git clone https://github.com/snyk/vscode-extension
 
 ## configure firewall to only work through proxy
 sudo systemctl enable squid
