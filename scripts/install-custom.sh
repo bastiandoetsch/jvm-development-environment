@@ -2,11 +2,14 @@
 set -e
 # make sure we can get the apt lock before running the plays
 sudo timedatectl set-timezone "Europe/Berlin"
+sudo iptables -F
 until ping -c 1 8.8.8.8; do echo "Internet down...sleeping for 5..."; sleep 5; done
-until sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install -y traceroute squid net-tools
-  do echo "Waiting for apt-get lock"
+until sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install -y traceroute squid net-tools iptables-persistent
+  do
+    echo "Waiting for apt-get lock"
     sleep 5
   done
+sudo apt-get autoremove -y && sudo apt-get clean -y
 
 ## install apps
 sudo snap install eclipse --classic
@@ -32,8 +35,8 @@ yes | sdk install  maven
 ## configure firewall to only work through proxy
 sudo systemctl enable squid
 sudo systemctl restart squid
-sudo iptables -F
 sudo iptables -A OUTPUT -m owner --uid-owner root -j ACCEPT
 sudo iptables -A OUTPUT -m owner --uid-owner proxy -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --dport 80 -j REJECT
 sudo iptables -A OUTPUT -p tcp --dport 443 -j REJECT
+sudo su -c 'iptables-save > /etc/iptables/rules.v4'
