@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e
-# make sure we can get the apt lock before running the plays
 sudo timedatectl set-timezone "Europe/Berlin"
 sudo iptables -F
 until ping -c 1 8.8.8.8; do echo "Internet down...sleeping for 5..."; sleep 5; done
@@ -15,8 +14,6 @@ sudo apt-get autoremove -y && sudo apt-get clean -y
 sudo snap install eclipse --classic
 sudo snap install intellij-idea-community --classic
 sudo snap install goland --classic
-
-##
 
 ## install java, gradle and maven
 export SDKMAN_DIR="$HOME/.sdkman"
