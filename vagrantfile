@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
         v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
         v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 
-        v.customize ["modifyvm", :id, "--vram", "48"]
+        v.customize ["modifyvm", :id, "--vram", "128"]
     end
 
     project = ENV['USER_PLAYS']

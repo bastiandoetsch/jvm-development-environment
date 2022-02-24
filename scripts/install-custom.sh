@@ -3,7 +3,7 @@ set -e
 sudo timedatectl set-timezone "Europe/Berlin"
 sudo iptables -F
 until ping -c 1 8.8.8.8; do echo "Internet down...sleeping for 5..."; sleep 5; done
-until sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install -y traceroute squid net-tools iptables-persistent
+until sudo apt-get update && sudo apt-get install -y traceroute squid net-tools 
   do
     echo "Waiting for apt-get lock"
     sleep 5
