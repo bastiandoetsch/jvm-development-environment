@@ -11,9 +11,7 @@ until sudo apt-get update && sudo apt-get install -y traceroute squid net-tools
 sudo apt-get autoremove -y && sudo apt-get clean -y
 
 ## install apps
-sudo snap install eclipse --classic
 sudo snap install intellij-idea-community --classic
-sudo snap install goland --classic
 
 ## install java, gradle and maven
 export SDKMAN_DIR="$HOME/.sdkman"
@@ -36,4 +34,5 @@ sudo iptables -A OUTPUT -m owner --uid-owner root -j ACCEPT
 sudo iptables -A OUTPUT -m owner --uid-owner proxy -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --dport 80 -j REJECT
 sudo iptables -A OUTPUT -p tcp --dport 443 -j REJECT
+sudo su -c 'mkdir -p /etc/iptables/'
 sudo su -c 'iptables-save > /etc/iptables/rules.v4'
