@@ -1,0 +1,52 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.require_version ">= 2.2.15"
+
+Vagrant.configure("2") do |config|
+    config.vagrant.host = :detect
+    config.vm.box = "bento/ubuntu-22.04"
+    config.vm.boot_timeout = 300
+    config.vm.box_check_update = true
+    config.vm.graceful_halt_timeout = 60
+    config.vm.post_up_message = "Login credentials are vagrant/vagrant"
+    config.vm.synced_folder ".", "/vagrant", disabled: false
+
+    config.ssh.password = "vagrant"
+    config.ssh.username = "vagrant"
+
+    config.vm.provider "parallels" do |v|
+        v.customize ["set", "basti-ubuntu", "--videosize", "1024"]
+        v.customize ["set", "basti-ubuntu", "--memsize", "16384"]
+        v.customize ["set", "basti-ubuntu", "--cpus", "8"]
+        v.customize ["set", "basti-ubuntu", "--3d-accelerate", "highest"]
+        v.customize ["set", "basti-ubuntu", "--auto-share-camera", "on"]
+        v.customize ["set", "basti-ubuntu", "--battery-status", "on"]
+        v.customize ["set", "basti-ubuntu", "--resource-quota", "unlimited"]
+    end
+
+    # uncomment to put the box on the network so it can be accessed by others
+#   config.vm.network "public_network"
+
+    project = ENV['USER_PLAYS']
+    config.vm.provision "shell" do |custom|
+        custom.path = "scripts/install-custom.sh"
+        custom.args = project
+        custom.privileged = false
+        custom.name = "Personal Ansible Provisions"
+    end
+
+    project = ENV['CORPORATE_PLAYS']
+    config.vm.provision "shell" do |corporate|
+        corporate.path = "scripts/install-corporate.sh"
+        corporate.args = project
+        corporate.privileged = false
+        corporate.name = "Corporate Ansible Provisions"
+    end
+
+    config.vm.define "ubuntu", primary: true do |ubuntu|
+        ubuntu.vm.provider "parallels" do |v|
+            v.name = "basti-ubuntu"
+        end
+    end
+end
