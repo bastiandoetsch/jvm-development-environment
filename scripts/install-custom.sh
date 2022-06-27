@@ -4,7 +4,7 @@ sudo timedatectl set-timezone "Europe/Berlin"
 sudo iptables -F
 until ping -c 1 8.8.8.8; do echo "Internet down...sleeping for 5..."; sleep 5; done
 
-until sudo DEBIAN_FRONTEND=noninteractive apt-get update && sudo apt-get install -y traceroute squid net-tools unzip zip tasksel ubuntu-gnome-desktop git python3
+until sudo DEBIAN_FRONTEND=noninteractive apt-get update && sudo apt-get install -y traceroute squid net-tools unzip zip tasksel ubuntu-gnome-desktop git python3 iptables-persistent
   do
     echo "Waiting for apt-get lock"
     sleep 5
@@ -16,11 +16,11 @@ sudo snap install intellij-idea-ultimate --classic
 sudo snap install intellij-idea-community --classic
 sudo snap install code --classic
 sudo snap install code-insiders --classic
-sudo snap install eclipse --edge --classic
 sudo snap install sublime-text --classic
 sudo snap install sublime-text --classic
 sudo snap install node --classic
 sudo snap install go --classic
+sudo snap install chromium
 
 ## install java, gradle and maven
 curl https://get.sdkman.io/ | bash
@@ -49,3 +49,4 @@ sudo iptables -A OUTPUT -p tcp --dport 443 -j REJECT
 sudo su -c 'mkdir -p /etc/iptables/'
 sudo su -c 'iptables-save > /etc/iptables/rules.v4'
 sudo systemctl set-default graphical.target
+reboot
