@@ -57,7 +57,7 @@ yes | sdk install maven
 openssl genrsa -out ca.key 4096
 openssl req -new -x509 -days 1826 -key ca.key -out ca.crt -subj "/C=de/O=fake/OU=fakeorgunit/CN=fake.com"
 sudo mkdir -p /tmp/sslsplit
-sudo nohup sslsplit -l connections.log -j /tmp/sslsplit/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080 &
+sudo nohup sslsplit -D -l connections.log -j /tmp/sslsplit/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080 &
 
 
 sudo sysctl -w net.ipv4.ip_forward=1
@@ -65,11 +65,5 @@ sudo iptables -F
 sudo iptables -t nat -F
 sudo iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner vagrant --dport 80 -j REDIRECT --to-ports 8080
 sudo iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner vagrant --dport 443 -j REDIRECT --to-ports 8443
-
-sudo iptables -A OUTPUT -m owner --uid-owner root -j ACCEPT
-sudo iptables -A OUTPUT -m owner --uid-owner proxy -j ACCEPT
-sudo iptables -A OUTPUT -p tcp --dport 80 -j REJECT
-sudo iptables -A OUTPUT -p tcp --dport 443 -j REJECT
-
 sudo systemctl set-default graphical.target
 sudo systemctl isolate graphical.target
